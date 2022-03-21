@@ -1,11 +1,13 @@
+export interface ISelect {
+  list: number[],
+  value: number
+}
 export interface IFeature {
+  id: string,
+  groupLabel: string,
   label: string,
-  input?: "text" | "number",
-  features?: IFeature[],
+  parent?: string,
+  select? : ISelect,
   disabled: boolean
 }
 
-export interface IFeatureGroup {
-  label: string,
-  features: IFeature[]
-} 

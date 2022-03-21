@@ -1,89 +1,95 @@
-import { IFeatureGroup, IFeature } from './Interfaces'
+import { IFeature } from './Interfaces'
 
-const flags: IFeatureGroup[] = [
+const dummyFlags: IFeature[] = [
   {
-    label: "GENERAL",
-    features: [
-      {
-        label: "CASE MANAGEMENT",
-        disabled: true
-      },
-      {
-        label: "MAP TIMELINE",
-        disabled: false
-      },
-      {
-        label: "VIEWS & BRIEFINGS",
-        disabled: true
-      },
-      {
-        label: "NOTIFICATIONS",
-        disabled: false
-      },
-      {
-        label: "MASS COMMUNICATIONS",
-        disabled: true
-      },
-      {
-        label: "TRAFFIC CAMERAS",
-        disabled: false
-      },
-    ]
+    id: "001",
+    groupLabel: "GENERAL",
+    label: "CASE MANAGEMENT",
+    disabled: true
   },
   {
-    label: "SETTINGS",
-    features: [
-      {
-        label: "AUDIT LOGS",
-        disabled: false
-      },
-      {
-        label: "USERS",
-        disabled: false
-      },
-    ]
+    id: "002",
+    groupLabel: "GENERAL",
+    label: "MAP TIMELINE",
+    disabled: false
   },
   {
-    label: "SETTINGS",
-    features: [
-      {
-        label: "AUDIT LOGS",
-        disabled: false
-      },
-      {
-        label: "USERS",
-        disabled: false,
-        features: [
-          {
-            label: "USER ADD",
-            disabled: false
-          },
-          {
-            label: "USER DELETE",
-            disabled: false
-          },
-          {
-            label: "MAX USERS",
-            disabled: false
-          },
-        ]
-
-      },
-    ]
+    id: "003",
+    groupLabel: "GENERAL",
+    label: "VIEWS & BRIEFINGS",
+    disabled: true
   },
   {
-    label: "ALERTS",
-    features: [
-      {
-        label: "ALERT MANAGER",
-        disabled: false
-      },
-      {
-        label: "ALERT RULES",
-        disabled: false
-      }
-    ]
+    id: "004",
+    groupLabel: "GENERAL",
+    label: "NOTIFICATIONS",
+    disabled: false
   },
+  {
+    id: "005",
+    groupLabel: "GENERAL",
+    label: "MASS COMMUNICATIONS",
+    disabled: true
+  },
+  {
+    id: "006",
+    groupLabel: "GENERAL",
+    label: "TRAFFIC CAMERAS",
+    disabled: false
+  },
+  {
+    id: "007",
+    groupLabel: "SETTINGS",
+    label: "AUDIT LOGS",
+    disabled: false
+  },
+  {
+    id: "008",
+    groupLabel: "SETTINGS",
+    label: "USERS",
+    disabled: false
+  },
+  {
+    id: "010",
+    groupLabel: "SETTINGS",
+    parent: "008",
+    label: "USER ADD",
+    disabled: false
+  },
+  {
+    id: "011",
+    groupLabel: "SETTINGS",
+    parent: "008",
+    label: "USER DELETE",
+    disabled: false
+  },
+  {
+    id: "012",
+    groupLabel: "SETTINGS",
+    parent: "008",
+    label: "MAX USERS",
+    select: {
+      value: 10,
+      list: [10, 20, 50, 100]
+    },
+    disabled: false
+  },
+  {
+    id: "013",
+    groupLabel: "ALERTS",
+    label: "ALERT MANAGER",
+    disabled: false
+  },
+  {
+    id: "014",
+    groupLabel: "ALERTS",
+    label: "ALERT RULES",
+    select: {
+      value: 40,
+      list: [20, 40, 60, 80]
+    },
+    disabled: false
+  }
 ]
 
-export default flags
+export default dummyFlags

@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import { IFeature, IFeatureGroup } from './Interfaces'
-import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai";
-
-
+import { useState, useContext, useRef, ReactEventHandler, SyntheticEvent } from 'react'
+import { IFeature } from './Interfaces'
+import { ActionTypes } from './reducers';
+import { AiFillCaretDown, AiFillCaretUp  } from "react-icons/ai";
+import { BsToggle2Off, BsToggle2On } from "react-icons/bs";
 interface FlagProps {
   feature:IFeature,
   showChildren?: boolean,
@@ -10,48 +10,41 @@ interface FlagProps {
   setDisabled?: (diabled:boolean) => void
 }
 
-
-const Flag =  ({feature, showChildren=true, showItems, setDisabled}: FlagProps) => {
-  return (
-    <div className="feature-header">
-        <header>{feature.label}</header>
-        <div>
-          <label className="switch">
-            <input type="checkbox" defaultChecked={!feature.disabled} onChange={(e)=>(setDisabled && setDisabled(!feature.disabled)) } />
-            <span className="slider round"></span>
-          </label>
-          {(feature.features && showItems && !feature.disabled) && (
-            (showChildren && <AiFillCaretDown onClick={() => showItems(false)}/> || 
-              <AiFillCaretUp onClick={() => showItems(true)} />)
-          )}
-        </div>
-    </div>
-  )
-}
-
-const FlagComponent = ({feature}: {feature: IFeature}) => {
+const FlagComponent = ({feature, childFeatures, dispatch}: {feature:IFeature, childFeatures: IFeature[], dispatch:any}) => {
   const [showChildren, setShowChildren] = useState(false);
-  const [disabled, setDisabled] = useState(feature.disabled);
 
-  const changeDisabled = (on:boolean) => {
-    feature.disabled = on;
-    setDisabled(on);
-    if(!on) {
-      setShowChildren(false)
-    } else {
-      setShowChildren(true)
-    }
+  const toggleDisabled = (e:any, id: string) => {
+    e.preventDefault()
+    dispatch({ type: ActionTypes.ToggleDisabled, payload: {id} })
   }
 
   return (
     <div className="feature">
-      <Flag feature={feature} showChildren={showChildren} 
-        showItems={(on) => setShowChildren(on)}
-        setDisabled={(disabled) => changeDisabled(disabled)}
-      />
-      {( !disabled && feature.features && showChildren) && (
+      <div className="feature-header"  >
+          <header>{feature.label}</header>
+          <div>
+            {feature.select && 
+              <select defaultValue={feature.select.value} onChange={(e) => { dispatch({type: ActionTypes.SelectFromDropdown, payload: {id: feature.id, value: e.target.value}})}}>
+                {feature.select.list.map((opt, idx) => <option key={idx} value={opt}>{opt}</option>
+                )}
+              </select>
+            }
+            <div className='toggle' onClick={(e)=> toggleDisabled(e, feature.id) }>
+              { feature.disabled && <BsToggle2Off size='1.4em'/> || <BsToggle2On color='blue' size='1.4em'/>}
+            </div>
+            
+            {(childFeatures.length > 0) && (
+              (feature.disabled && <AiFillCaretUp size='1.5em' /> ||
+                (
+                  showChildren && <AiFillCaretDown size='1.5em' onClick={() => setShowChildren(!showChildren)}/> || 
+                  <AiFillCaretUp size='1.5em' onClick={() => setShowChildren(!showChildren)} />)
+                )                
+            )}
+          </div>
+      </div>
+      {( !feature.disabled && childFeatures && showChildren) && (
         <div className='feature-subitems'>
-          {feature.features.map(f => (<Flag feature={f}/>))}
+          {childFeatures.map(f => (<FlagComponent feature={f} childFeatures={[]} dispatch={dispatch}/>))}
         </div>
       )}
     </div>)
